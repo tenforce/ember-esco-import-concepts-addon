@@ -1,20 +1,8 @@
 `import Ember from 'ember'`
-
-class Band extends Ember.Object
-  name: ''
-  language: 'com'
-  slug: Ember.computed 'name', ->
-    console.log 'Recomputing slug'
-    @get('name').dasherize()
-  site: Ember.computed 'slug', 'language', ->
-    console.log 'Recomputing site'
-    'http://bands.com/' + @get 'slug' + '.' + @get 'language'
+`import Band from '../models/band'`
+`import Song from '../models/song'`
 
 
-class Song extends Ember.Object
-  title: ''
-  rating: 0
-  band: ''
 
 
 
@@ -38,13 +26,13 @@ pretender = new Song
   band: 'Foo Fighters'
   rating: 2
 
+#
+# class BandsColletion extends Ember.Object
+#   content: []
+#   sortProperties: ['name:desc']
+#   sortedContent: Ember.computed.sort 'content', 'sortProperties'
 
-class BandsColletion extends Ember.Object
-  content: []
-  sortProperties: ['name:desc']
-  sortedContent: Ember.computed.sort 'content', 'sortProperties'
-
-bands = new BandsColletion
+bands = []
 
 ledZeppelin = new Band
   name: 'Led Zeppelin'
@@ -58,11 +46,19 @@ fooFighters = new Band
   name: 'Foo Fighters'
   songs: [pretender]
 
-bands.get('content').pushObjects [ledZeppelin, pearlJam, fooFighters]
+bands.pushObjects [ledZeppelin, pearlJam, fooFighters]
 
 
 
 class BandsRoute extends Ember.Route
-    model: -> bands.get 'sortedContent'
+    model: -> bands
+
+    actions:
+      createBand: ->
+        name = @get('controller').get('name')
+        band = new Band
+          name: name
+        bands.pushObject band
+        @get('controller').set('name', '')
 
 `export default BandsRoute`
