@@ -26,11 +26,6 @@ pretender = new Song
   band: 'Foo Fighters'
   rating: 2
 
-#
-# class BandsColletion extends Ember.Object
-#   content: []
-#   sortProperties: ['name:desc']
-#   sortedContent: Ember.computed.sort 'content', 'sortProperties'
 
 bands = []
 

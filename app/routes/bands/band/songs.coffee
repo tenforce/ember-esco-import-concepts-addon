@@ -18,4 +18,12 @@ class BandsBandSongsRoute extends Ember.Route
       band.get('songs').pushObject song
       controller.set 'title', ''
 
+    updateRating: (params) ->
+      song = params.item
+      rating = params.rating
+
+      song.set('rating', rating)
+
+
+
 `export default BandsBandSongsRoute`
