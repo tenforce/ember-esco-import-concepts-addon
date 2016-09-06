@@ -6,6 +6,8 @@ Router = Ember.Router.extend
 
 
 Router.map ->
-  @route 'smth'
+  @route 'bands', ->
+    @route 'band', {path:':slug'}, ->
+      @route 'songs'
 
 `export default Router;`

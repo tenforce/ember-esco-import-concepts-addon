@@ -8,7 +8,7 @@ class Song extends Ember.Object
 blackDog = new Song
   title: 'Black Dog'
   band: 'Pearl Jam'
-  rating: 9000
+  rating: 3
 
 yellowLedbetter = new Song
   title: 'Yellow Ledbetter'
@@ -25,8 +25,18 @@ songs.get('content').pushObjects [blackDog, yellowLedbetter]
 
 
 
+window.songs = songs
+
+alwaysWaiting = new Song
+  title: 'Always Waiting'
+  band: 'KP'
+  rating: 7
+
+window.newSong = alwaysWaiting
+
+
 class ApplicationController extends Ember.Controller
-  songs: songs.get 'sortedContent'
+  songs: songs.get 'content'
 
 
 `export default ApplicationController`

@@ -1,8 +1,10 @@
 <!-- app/templates/application.hbs -->
-<h2 id="title">Welcome to Ember.js</h2>
 
-<ul>
-  {{#each songs as |song|}}
-    <li>{{song.title}} by {{song.band}} ({{song.rating}})</li>
-  {{/each}}
-</ul>
+<div class="container">
+  <div class="col-md-6">
+    <div class="page-header">
+      <h1>Rock &amp; Roll<small> with Ember.js</small></h1>
+    </div>
+    {{outlet}}
+  </div>
+</div>
