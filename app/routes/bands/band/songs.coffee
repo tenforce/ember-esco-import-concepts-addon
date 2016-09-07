@@ -10,19 +10,27 @@ class BandsBandSongsRoute extends Ember.Route
     createSong: ->
       controller = @get 'controller'
       band = @modelFor 'bands.band'
-      title = controller.get 'title'
 
-      song = new Song
-        title: title
+
+      song = @store.createRecord 'song',
+        title: controller.get 'title'
         band: band
-      band.get('songs').pushObject song
-      controller.set 'title', ''
+
+
+      song.save().then ->
+        controller.set 'title', ''
+      band.get('songs').pushObject(song)
+      band.save()
 
     updateRating: (params) ->
       song = params.item
       rating = params.rating
 
+      if song.get('rating') is rating
+        rating = 0
+
       song.set('rating', rating)
+      song.save()
 
 
 

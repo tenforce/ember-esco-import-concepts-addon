@@ -10,6 +10,6 @@ class BandsBandDetailsController extends Ember.Controller
 
     save: ->
       @set 'isEditing', false
-      false
+      true
 
 `export default BandsBandDetailsController`

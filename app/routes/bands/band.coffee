@@ -2,8 +2,9 @@
 
 class BandsBandRoute extends Ember.Route
   model: (params) ->
-    bands = @modelFor 'bands'
-    bands.findBy 'slug', params.slug
+    @store.findRecord 'band', params.id
+    # bands = @modelFor 'bands'
+    # bands.findBy 'slug', params.slug
 
   afterModel: (band) ->
     description = band.get 'description'

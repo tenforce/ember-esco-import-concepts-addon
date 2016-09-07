@@ -1,9 +1,9 @@
-`import Ember from 'ember'`
+`import DS from 'ember-data'`
 
 
-class Song extends Ember.Object
-  title: ''
-  rating: 0
-  band: null
+class Song extends DS.Model
+  title:  DS.attr('string')
+  rating: DS.attr('number')
+  band:   DS.belongsTo('band', inverse:null)
 
 `export default Song`

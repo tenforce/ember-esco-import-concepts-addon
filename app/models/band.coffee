@@ -1,19 +1,10 @@
-`import Ember from 'ember'`
-
-class Band extends Ember.Object
-  name: ''
-  description: ''
+`import DS from 'ember-data'`
 
 
-  init: ->
-    @_super(arguments...)
-    if not @get('songs')
-      @set('songs', [])
-
-
-
-  slug: Ember.computed 'name', ->
-    console.log 'Recomputing slug'
-    @get('name').dasherize()
+class Band extends DS.Model
+  name:         DS.attr('string')
+  description:  DS.attr()
+  songs:        DS.hasMany('song', inverse:null)
+  # disable automatic inverse relationship updates, it causes bugs
 
 `export default Band`

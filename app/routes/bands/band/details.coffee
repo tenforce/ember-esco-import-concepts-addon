@@ -4,6 +4,16 @@ class BandsBandDetailsRoute extends Ember.Route
   model: -> @modelFor 'bands.band'
 
   actions:
+
+    save: ->
+      controller = @get 'controller'
+      band = controller.get 'model'
+      band.save()
+
+
+
+
+
     willTransition: (transition) ->
       controller = @get 'controller'
 
