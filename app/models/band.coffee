@@ -2,7 +2,14 @@
 
 class Band extends Ember.Object
   name: ''
-  songs: []
+
+
+  init: ->
+    @_super(arguments...)
+    if not @get('songs')
+      @set('songs', [])
+
+
 
   slug: Ember.computed 'name', ->
     console.log 'Recomputing slug'

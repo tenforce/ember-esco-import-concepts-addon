@@ -55,5 +55,6 @@ class BandsRoute extends Ember.Route
           name: name
         bands.pushObject band
         @get('controller').set('name', '')
+        @transitionTo 'bands.band.songs', band
 
 `export default BandsRoute`
