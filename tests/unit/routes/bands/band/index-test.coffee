@@ -1,6 +1,6 @@
 `import { moduleFor, test } from 'ember-qunit'`
 
-moduleFor 'route:smth', 'Unit | Route | smth', {
+moduleFor 'route:bands/band/index', 'Unit | Route | bands/band/index', {
   # Specify the other units that are required for this test.
   # needs: ['controller:foo']
 }

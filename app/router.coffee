@@ -9,5 +9,7 @@ Router.map ->
   @route 'bands', ->
     @route 'band', {path:':slug'}, ->
       @route 'songs'
+      @route 'details'
+      @route 'index'
 
 `export default Router;`

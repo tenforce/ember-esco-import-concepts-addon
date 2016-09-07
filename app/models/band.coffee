@@ -2,6 +2,7 @@
 
 class Band extends Ember.Object
   name: ''
+  description: ''
 
 
   init: ->

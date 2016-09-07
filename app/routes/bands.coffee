@@ -35,6 +35,7 @@ ledZeppelin = new Band
 
 pearlJam = new Band
   name: 'Pearl Jam'
+  description: 'Pearl Jam is an American rock band, formed in Seattle, Washington in 1990.'
   songs: [daughter, yellowLedbetter]
 
 fooFighters = new Band
@@ -56,5 +57,9 @@ class BandsRoute extends Ember.Route
         bands.pushObject band
         @get('controller').set('name', '')
         @transitionTo 'bands.band.songs', band
+
+      didTransition: ->
+        band = @modelFor 'bands.band'
+        Ember.$(document).attr 'title', "#{band.get 'name'} Bands - Rock & Roll"
 
 `export default BandsRoute`

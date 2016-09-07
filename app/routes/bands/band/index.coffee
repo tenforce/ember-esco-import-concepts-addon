@@ -1,10 +1,6 @@
 `import Ember from 'ember'`
 
-class BandsBandRoute extends Ember.Route
-  model: (params) ->
-    bands = @modelFor 'bands'
-    bands.findBy 'slug', params.slug
-
+class BandsBandIndexRoute extends Ember.Route
   afterModel: (band) ->
     description = band.get 'description'
     if Ember.isEmpty description
@@ -12,4 +8,4 @@ class BandsBandRoute extends Ember.Route
     else
       @transitionTo 'bands.band.details'
 
-`export default BandsBandRoute`
+`export default BandsBandIndexRoute`
