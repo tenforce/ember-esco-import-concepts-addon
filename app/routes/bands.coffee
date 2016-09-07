@@ -34,6 +34,7 @@ class BandsRoute extends Ember.Route
 
       didTransition: ->
         band = @modelFor 'bands.band'
-        Ember.$(document).attr 'title', "#{band.get 'name'} Bands - Rock & Roll"
+        if band
+          Ember.$(document).attr 'title', "#{band.get 'name'} Bands - Rock & Roll"
 
 `export default BandsRoute`
