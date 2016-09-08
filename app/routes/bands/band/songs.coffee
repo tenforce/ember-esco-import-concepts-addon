@@ -1,10 +1,12 @@
 `import Ember from 'ember'`
 
 `import Song from '../../../models/song'`
-
+`import wait from '../../../utils/wait'`
 
 class BandsBandSongsRoute extends Ember.Route
-  model: -> @modelFor 'bands.band'
+  model: ->
+    model = @modelFor 'bands.band'
+    # wait model, 250
 
   queryParams:
     sortBy:

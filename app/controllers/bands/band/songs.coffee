@@ -2,6 +2,7 @@
 
 
 class BandsBandSongsController extends Ember.Controller
+  # Doesn't work like this
   # queryParams:
   #   sortBy: 'sort'
   #   searchTerm: 's'

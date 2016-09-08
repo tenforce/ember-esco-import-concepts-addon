@@ -1,12 +1,13 @@
 `import Ember from 'ember'`
-
+`import wait from '../utils/wait';`
 
 
 
 
 class BandsRoute extends Ember.Route
     model: ->
-      @store.findAll('band')
+      bands = @store.findAll('band')
+      # wait bands, 250
 
     actions:
       createBand: ->
