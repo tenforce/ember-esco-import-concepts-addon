@@ -6,6 +6,14 @@
 class BandsBandSongsRoute extends Ember.Route
   model: -> @modelFor 'bands.band'
 
+  queryParams:
+    sortBy:
+      as: 'sort'
+      replace: true
+    searchTerm:
+      as: 's'
+      replace: true
+
   actions:
     createSong: ->
       controller = @get 'controller'
