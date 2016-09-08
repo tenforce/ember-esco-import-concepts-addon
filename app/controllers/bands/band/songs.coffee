@@ -1,5 +1,8 @@
 `import Ember from 'ember'`
 
+`import {capitalize} from '../../../helpers/capitalize'`
+
+
 
 class BandsBandSongsController extends Ember.Controller
   # Doesn't work like this
@@ -10,11 +13,12 @@ class BandsBandSongsController extends Ember.Controller
 
   title: ''
   songCreationStarted: false
+  newSongPlaceholder: Ember.computed 'model.name', ->
+    bandName = @get 'model.name'
+    "New #{capitalize bandName} song"
 
   isAddButtonDisabled: Ember.computed 'title', ->
     Ember.isEmpty @get('title')
-
-
   canCreateSong: Ember.computed 'songCreationStarted', 'model.songs.length', ->
     @get('songCreationStarted') or @get('model.songs.length')
 
@@ -34,6 +38,8 @@ class BandsBandSongsController extends Ember.Controller
     searchTerm = @get('searchTerm').toLowerCase()
     @get('model.songs').filter (song)->
       song.get('title').toLowerCase().indexOf(searchTerm) isnt -1
+
+
 
 
   actions:
