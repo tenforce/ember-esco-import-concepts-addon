@@ -81,6 +81,6 @@ class EscoImportConceptsComponent extends Ember.Component
           console.log "Call to copy-graph failed."
           @set 'importStatus', "Copying failed for #{fileName} with id #{id}. The copy-graph service might be unavailable, or the graph is not found. It might already be copied."
 
-
+  # TODO cleanup after copy-graph
 
 `export default EscoImportConceptsComponent`
