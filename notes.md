@@ -1,10 +1,4 @@
 
-import-concepts on 8000
-validation on 8001
-
-
-
-
 
 
 Run import concepts
@@ -17,7 +11,7 @@ Run import concepts
 
 Upload file with
 
-  curl -X POST -T example.tsv http://localhost:8000/import/taxonomy
+  curl -X POST -T example.tsv http://localhost:1080/import/taxonomy
 
   curl -X POST -T example.tsv http://localhost/import-concepts/import/taxonomy
 
