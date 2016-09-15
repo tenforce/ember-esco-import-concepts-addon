@@ -32,7 +32,7 @@ class EscoImportConceptsComponent extends Ember.Component
         data: fileContent
         processData: false
         success: (data) => @validateFile fileName, data.id
-        error: => console.log "Upload failed"
+        error: => console.log "Call to import-concepts failed."
       false
 
 
@@ -40,23 +40,37 @@ class EscoImportConceptsComponent extends Ember.Component
     @set 'importStatus', "Validating #{fileName} as #{id}"
     Ember.$.ajax
       type: "POST"
-      url: "/validations/run?graph=" + id
+      url: "/validations/run?graph=#{id}"
       data: {}
       success: (data) => @checkValidation fileName, id
+      error: => console.log "Call to validation service failed."
 
   checkValidation: (fileName, id) ->
-    @get('store').query('escograph','filter[id]': id).then (res) =>
-      status = res.objectAt(0).get('status')
-      switch status
-        when "Waiting"
-          console.log "Busy"
-          Ember.run.later((()=>@checkValidation fileName, id), 500)
-        when "Validated" then @finishedValidation fileName, id
-        when "Invalid" then @set 'importStatus', "#{fileName} is invalid."
-        else console.log status
+    Ember.$.ajax
+      type: "GET"
+      url: "/validations/results?graph=#{id}"
+      success: (data) =>
+        console.log data
+        status = data.meta.status.match(/#(.+)$/)[1]
+        switch status
+          when "NotValidated", "underValidation"
+            console.log status
+            Ember.run.later((()=>@checkValidation fileName, id), 500)
+          when "Validated" then @finishedValidation fileName, id
+          when "Invalid" then @set 'importStatus', "#{fileName} as #{id} is invalid."
+          else console.log "Unknown status: #{status}."
+      error: => console.log "Call to validation service failed."
 
   finishedValidation: (fileName, id) ->
-    # TODO copy
+    @set 'importStatus', "#{fileName} as #{id} is validated. Copying into application graph."
+    Ember.$.ajax
+        type: "POST"
+        url: "/copy-graph"
+        data: '{"id":"'+id+'"}'
+        contentType: "application/json; charset=utf-8"
+        dataType: "json"
+        success: (data) => console.log "Copied: " + data
+        error: => console.log "Call to copy-graph failed."
 
 
 

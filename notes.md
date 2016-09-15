@@ -28,7 +28,7 @@ Run validation service
 
 Validate a file
 
-  curl -X POST -H "Content-Length: 0" http://localhost:8001/validations/run?graph=
+  curl -X POST -H "Content-Length: 0" http://localhost:1080/validations/run?graph=
 
 Run copy service
 
@@ -36,3 +36,8 @@ Run copy service
     -e SPARQL_ENDPOINT="http://virtuoso:8890/sparql-graph-crud" \
     -p 8002:9000 --net user_bridge \
     copy-graph
+
+Copy graph
+
+  something like
+  curl -i -H "Content-Type: application/json" -d '{"id":"938a4201-554c-4536-ac95-f8d0155a1801"}' http://localhost:1080/copy-graph/
