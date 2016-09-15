@@ -1,4 +1,5 @@
 
+`import Ember from 'ember'`
 
 
 wait = (value, delay)->
@@ -13,7 +14,7 @@ wait = (value, delay)->
       promise.then (result) ->
         resolve result
     ,
-    delay
+      delay
 
 
 `export default wait`

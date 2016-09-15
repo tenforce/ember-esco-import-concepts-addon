@@ -1,16 +1,12 @@
-{{!-- {{yield}} --}}
 
+<form id="fileForm" {{action "importFile" on="submit"}}>
+  Select a file to import:
+  <br>
+  {{input type="file" name="fileToUpload" value=fileToUpload}}
+  <br>
+  <button type="submit">Import</button>
+</form>
+<br>
 
-<div>
-  <div>
-    <form {{action "importFile" on="submit"}}>
-      Select a file to import:
-      <input type="file" name="fileToUpload" id="fileToUpload">
-      <br>
-      <button type="submit">Import</button>
-    </form>
-    Status: {{importStatus}}
-
-  </div>
-
-</div>
+Status: {{importStatus}}
+<br>
