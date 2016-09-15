@@ -34,14 +34,14 @@ class EscoImportConceptsComponent extends Ember.Component
           @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
       false
 
-
   validateFile: (fileName, id) ->
     @set 'importStatus', "Validating #{fileName} with id #{id}."
     Ember.$.ajax
       type: "POST"
       url: "/validations/run?graph=#{id}"
       data: {}
-      success: (data) => @checkValidation fileName, id
+      success: (data) =>
+        @checkValidation fileName, id
       error: =>
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
@@ -51,7 +51,6 @@ class EscoImportConceptsComponent extends Ember.Component
       type: "GET"
       url: "/validations/results?graph=#{id}"
       success: (data) =>
-        # console.log data.meta.status
         status = data.meta.status.match(/#(.+)$/)[1] #match the relevant status string
         switch status
           when "NotValidated", "underValidation"
@@ -60,7 +59,7 @@ class EscoImportConceptsComponent extends Ember.Component
           when "Validated"
             @finishedValidation fileName, id
           when "Invalid"
-            @set 'importStatus', "Validation failed. #{fileName} with id #{id} is invalid."
+            @set 'importStatus', "Validation not passed. #{fileName} with id #{id} is invalid."
           else
             @set 'importStatus', "Validation failed. Unknown status for #{fileName} with id #{id}: #{status}."
             console.log "Unknown status: #{status}."
@@ -73,7 +72,7 @@ class EscoImportConceptsComponent extends Ember.Component
     Ember.$.ajax
         type: "POST"
         url: "/copy-graph"
-        data: '{"id":"'+id+'"}'
+        data: """{"id":"#{id}"}"""
         contentType: "application/json; charset=utf-8"
         dataType: "json"
         success: (data) =>
