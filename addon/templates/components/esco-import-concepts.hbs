@@ -1,12 +1,9 @@
 
 <form id="fileForm" {{action "importFile" on="submit"}}>
-  Select a file to import:
-  <br>
+  <label>Select a file to import:</label>
   {{input type="file" name="fileToUpload" value=fileToUpload}}
-  <br>
   <button type="submit">Import</button>
 </form>
-<br>
 
 <h3>Status:</h3>
   {{importStatus}}
