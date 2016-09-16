@@ -34,6 +34,7 @@ class EscoImportConceptsComponent extends Ember.Component
           @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
       false
 
+  # Start validation
   validateFile: (fileName, id) ->
     @set 'importStatus', "Validating #{fileName} with id #{id}."
     Ember.$.ajax
@@ -46,18 +47,20 @@ class EscoImportConceptsComponent extends Ember.Component
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
 
+  # Poll validation status
   checkValidation: (fileName, id) ->
     Ember.$.ajax
       type: "GET"
       url: "/validations/results?graph=#{id}"
       success: (data) =>
+        console.log data
         status = data.meta.status.match(/#(.+)$/)[1] #match the relevant status string
         switch status
           when "NotValidated", "underValidation"
             console.log "Busy: #{status}"
             Ember.run.later((()=>@checkValidation fileName, id), 1000) #poll every second
           when "Validated"
-            @finishedValidation fileName, id
+            @copyGraph fileName, id
           when "Invalid"
             @set 'importStatus', "Validation not passed. #{fileName} with id #{id} is invalid."
           else
@@ -67,7 +70,8 @@ class EscoImportConceptsComponent extends Ember.Component
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
 
-  finishedValidation: (fileName, id) ->
+  # Copy temp graph into application graph
+  copyGraph: (fileName, id) ->
     @set 'importStatus', "#{fileName} with id #{id} is validated. Copying into application graph."
     Ember.$.ajax
         type: "POST"
@@ -77,10 +81,21 @@ class EscoImportConceptsComponent extends Ember.Component
         dataType: "json"
         success: (data) =>
           @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
+          @cleanUp()
         error: =>
           console.log "Call to copy-graph failed."
           @set 'importStatus', "Copying failed for #{fileName} with id #{id}. The copy-graph service might be unavailable, or the graph is not found. It might already be copied."
 
-  # TODO cleanup after copy-graph
+  # Clean up the temp graph after importing to application graph
+  cleanUp: ->
+    Ember.$.ajax
+      type: "POST"
+      url: "/cleanup/clean?delete=import"
+      data: {}
+      success: (data) =>
+        console.log "Cleanup succeeded."
+      error: =>
+        console.log "Call to cleanup service failed."
+
 
 `export default EscoImportConceptsComponent`
