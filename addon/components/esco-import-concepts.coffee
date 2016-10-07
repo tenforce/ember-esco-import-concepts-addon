@@ -23,7 +23,7 @@ class EscoImportConceptsComponent extends Ember.Component
 
       Ember.$.ajax
         type: "POST"
-        url: "/import-concepts/import/taxonomy"
+        url: "/import-concepts/taxonomy"
         data: fileContent
         processData: false
         success: (data) =>
