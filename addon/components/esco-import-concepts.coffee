@@ -23,7 +23,7 @@ class EscoImportConceptsComponent extends Ember.Component
 
       Ember.$.ajax
         type: "POST"
-        url: "/import-concepts/taxonomy"
+        url: "/import-concepts/import/taxonomy"
         data: fileContent
         processData: false
         success: (data) =>
@@ -90,7 +90,7 @@ class EscoImportConceptsComponent extends Ember.Component
   cleanUp: ->
     Ember.$.ajax
       type: "POST"
-      url: "/cleanup/clean?delete=import"
+      url: "/clean-up/clean?delete=import"
       data: {}
       success: (data) =>
         console.log "Cleanup succeeded."
