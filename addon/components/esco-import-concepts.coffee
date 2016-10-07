@@ -15,7 +15,6 @@ class EscoImportConceptsComponent extends Ember.Component
 
   actions:
     importFile: ->
-      # TODO check if there's a file
       controller = @get 'controller'
       fileContent = event.path[0][0].files[0]
       fileName = fileContent.name
@@ -32,6 +31,7 @@ class EscoImportConceptsComponent extends Ember.Component
         error: =>
           console.log "Call to import-concepts failed."
           @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
+          @cleanUp()
       false
 
   # Start validation
@@ -46,6 +46,7 @@ class EscoImportConceptsComponent extends Ember.Component
       error: =>
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
+        @cleanUp()
 
   # Poll validation status
   checkValidation: (fileName, id) ->
@@ -69,6 +70,7 @@ class EscoImportConceptsComponent extends Ember.Component
       error: =>
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
+        @cleanUp()
 
   # Copy temp graph into application graph
   copyGraph: (fileName, id) ->
@@ -85,6 +87,7 @@ class EscoImportConceptsComponent extends Ember.Component
         error: =>
           console.log "Call to copy-graph failed."
           @set 'importStatus', "Copying failed for #{fileName} with id #{id}. The copy-graph service might be unavailable, or the graph is not found. It might already be copied."
+          @cleanUp()
 
   # Clean up the temp graph after importing to application graph
   cleanUp: ->
