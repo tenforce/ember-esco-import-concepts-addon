@@ -61,7 +61,7 @@ class EscoImportConceptsComponent extends Ember.Component
             console.log "Busy: #{status}"
             Ember.run.later((()=>@checkValidation fileName, id), 1000) #poll every second
           when "Validated"
-            @copyGraph fileName, id
+            @moveGraph fileName, id
           when "Invalid"
             @set 'importStatus', "Validation not passed. #{fileName} with id #{id} is invalid."
           else
@@ -72,21 +72,18 @@ class EscoImportConceptsComponent extends Ember.Component
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
         @cleanUp()
 
-  # Copy temp graph into application graph
-  copyGraph: (fileName, id) ->
-    @set 'importStatus', "#{fileName} with id #{id} is validated. Copying into application graph."
+  # Move temp graph into application graph
+  moveGraph: (fileName, id) ->
+    @set 'importStatus', "#{fileName} with id #{id} is validated. Moveing into application graph."
     Ember.$.ajax
-        type: "POST"
-        url: "/copy-graph"
-        data: """{"id":"#{id}"}"""
-        contentType: "application/json; charset=utf-8"
-        dataType: "json"
+        type: "GET"
+        url: "/move-graph/move?uuid=#{id}"
         success: (data) =>
           @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
           @cleanUp()
         error: =>
-          console.log "Call to copy-graph failed."
-          @set 'importStatus', "Copying failed for #{fileName} with id #{id}. The copy-graph service might be unavailable, or the graph is not found. It might already be copied."
+          console.log "Call to move-graph failed."
+          @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
           @cleanUp()
 
   # Clean up the temp graph after importing to application graph
