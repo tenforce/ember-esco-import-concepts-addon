@@ -39,7 +39,7 @@ class EscoImportConceptsComponent extends Ember.Component
     @set 'importStatus', "Validating #{fileName} with id #{id}."
     Ember.$.ajax
       type: "POST"
-      url: "/validations/run?graph=#{id}"
+      url: "/validation/run?graph=#{id}"
       data: {}
       success: (data) =>
         @checkValidation fileName, id
@@ -52,7 +52,7 @@ class EscoImportConceptsComponent extends Ember.Component
   checkValidation: (fileName, id) ->
     Ember.$.ajax
       type: "GET"
-      url: "/validations/results?graph=#{id}"
+      url: "/validation/results?graph=#{id}"
       success: (data) =>
         console.log data
         status = data.meta.status.match(/#(.+)$/)[1] #match the relevant status string
