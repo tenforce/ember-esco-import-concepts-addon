@@ -89,7 +89,7 @@ class EscoImportConceptsComponent extends Ember.Component
   # Clean up the temp graph after importing to application graph
   cleanUp: ->
     Ember.$.ajax
-      type: "POST"
+      type: "DELETE"
       url: "/clean-up/clean?delete=import"
       data: {}
       success: (data) =>
