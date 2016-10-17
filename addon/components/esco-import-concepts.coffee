@@ -19,11 +19,13 @@ class EscoImportConceptsComponent extends Ember.Component
   tagName: 'div'
   className: ['esco-import-concepts']
 
-  importStatus: startingMessage
+  importStatus: Ember.computed 'startingMessage', ->
+    @get 'startingMessage'
 
   actions:
     importFile: ->
       controller = @get 'controller'
+      importerEndpoint = @get 'importerEndpoint'
       fileContent = event.path[0][0].files[0]
       fileName = fileContent.name
 
