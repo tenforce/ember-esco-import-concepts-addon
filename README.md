@@ -1,26 +1,23 @@
+**Note: this addon has been generalized to support all kinds of resources.**
+
 # Ember-esco-import-concepts-addon
 
-This README outlines the details of collaborating on this Ember addon.
+An Ember plugin to import resources to the triple store. In turn, the graph in the selected file is
 
-## Installation
+ - Uploaded using the `import-concepts` microservice
+ - Validated with `validation-microservice`
+ - Moved into the application graph with the `move-graph` microservice
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+After completion or when something goes wrong, `clean-up-microservice` is called to remove temporary triples. 
 
-## Running
+# Usage
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+The addon takes two parameters
 
-## Running Tests
+ - `importerEndpoint` specifies which HTTP endpoint of `import-concepts` should be used.
+ - `startingMessage` sets the message the user sees before choosing the file.
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+Example usage
 
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+    {{esco-import-concepts importerEndpoint="/import/taxonomy" startingMessage="Select a taxonomy file to import..."}}
+    
