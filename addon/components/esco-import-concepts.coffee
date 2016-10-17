@@ -7,11 +7,19 @@
 
 
 class EscoImportConceptsComponent extends Ember.Component
+  # Addon parameters
+
+  # eg "/import/taxonomy"
+  importerEndpoint: Ember.K
+  # eg "Select a taxonomy file to import..."
+  startingMessage: Ember.K
+
+
   layout: layout
   tagName: 'div'
   className: ['esco-import-concepts']
 
-  importStatus: "Select a file to import..."
+  importStatus: startingMessage
 
   actions:
     importFile: ->
@@ -23,7 +31,7 @@ class EscoImportConceptsComponent extends Ember.Component
 
       Ember.$.ajax
         type: "POST"
-        url: "/import-concepts/import/taxonomy"
+        url: "/import-concepts#{importerEndpoint}"
         data: fileContent
         processData: false
         success: (data) =>
