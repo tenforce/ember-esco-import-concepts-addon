@@ -30,6 +30,7 @@ class EscoImportConceptsComponent extends Ember.Component
       fileName = fileContent.name
 
       @set 'importStatus', "Uploading #{fileName}."
+      @cleanUp()
 
       Ember.$.ajax
         type: "POST"
@@ -41,7 +42,6 @@ class EscoImportConceptsComponent extends Ember.Component
         error: =>
           console.log "Call to import-concepts failed."
           @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
-          @cleanUp()
       false
 
   # Start validation
@@ -56,7 +56,6 @@ class EscoImportConceptsComponent extends Ember.Component
       error: =>
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
-        @cleanUp()
 
   # Poll validation status
   checkValidation: (fileName, id) ->
@@ -80,7 +79,6 @@ class EscoImportConceptsComponent extends Ember.Component
       error: =>
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
-        @cleanUp()
 
   # Move temp graph into application graph
   moveGraph: (fileName, id) ->
@@ -96,7 +94,8 @@ class EscoImportConceptsComponent extends Ember.Component
           @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
           @cleanUp()
 
-  # Clean up the temp graph after importing to application graph
+  # Clean up the temp graph before and after importing to application graph
+  # Don't clean up in case of an error. The temp graph contains the reason for the error, which we might want to consult
   cleanUp: ->
     Ember.$.ajax
       type: "DELETE"
