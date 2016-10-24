@@ -28,6 +28,7 @@ class EscoImportConceptsComponent extends Ember.Component
 
   actions:
     importFile: ->
+      @sendAction('toggleValidations', false)
       controller = @get 'controller'
       importerEndpoint = @get 'importerEndpoint'
       fileContent = event.path[0][0].files[0]
@@ -77,8 +78,10 @@ class EscoImportConceptsComponent extends Ember.Component
             @moveGraph fileName, id
           when "Invalid"
             @set 'importStatus', "Validation not passed. #{fileName} with id #{id} is invalid."
+            @sendAction('toggleValidations', true)
           else
             @set 'importStatus', "Validation failed. Unknown status for #{fileName} with id #{id}: #{status}."
+            @sendAction('toggleValidations', true)
             console.log "Unknown status: #{status}."
       error: =>
         console.log "Call to validation service failed."
