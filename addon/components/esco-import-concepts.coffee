@@ -22,6 +22,10 @@ class EscoImportConceptsComponent extends Ember.Component
   importStatus: Ember.computed 'startingMessage', ->
     @get 'startingMessage'
 
+  shouldDisable: Ember.computed 'fileToUpload', ->
+    unless @get('fileToUpload') is undefined then return false
+    return true
+
   actions:
     importFile: ->
       controller = @get 'controller'

@@ -2,7 +2,7 @@
 <form id="fileForm" {{action "importFile" on="submit"}}>
   <label>{{startingMessage}}</label>
   {{input type="file" name="fileToUpload" value=fileToUpload}}
-  <button type="submit">Import</button>
+  <button type="submit" disabled={{shouldDisable}}>Import</button>
 </form>
 
 <h3>Status:</h3>
