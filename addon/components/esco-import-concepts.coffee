@@ -95,6 +95,7 @@ class EscoImportConceptsComponent extends Ember.Component
         url: "/move-graph/move?uuid=#{id}"
         success: (data) =>
           @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
+          @sendAction('dataImported', data)
           @cleanUp()
         error: =>
           console.log "Call to move-graph failed."
