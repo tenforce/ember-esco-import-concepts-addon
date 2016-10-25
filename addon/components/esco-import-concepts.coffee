@@ -35,7 +35,6 @@ class EscoImportConceptsComponent extends Ember.Component
       fileName = fileContent.name
 
       @set 'importStatus', "Uploading #{fileName}."
-      @cleanUp()
 
       Ember.$.ajax
         type: "POST"
@@ -96,23 +95,10 @@ class EscoImportConceptsComponent extends Ember.Component
         success: (data) =>
           @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
           @sendAction('dataImported', data)
-          @cleanUp()
         error: =>
           console.log "Call to move-graph failed."
           @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
-          @cleanUp()
 
-  # Clean up the temp graph before and after importing to application graph
-  # Don't clean up in case of an error. The temp graph contains the reason for the error, which we might want to consult
-  cleanUp: ->
-    Ember.$.ajax
-      type: "DELETE"
-      url: "/clean-up/clean?delete=import"
-      data: {}
-      success: (data) =>
-        console.log "Cleanup succeeded."
-      error: =>
-        console.log "Call to cleanup service failed."
 
 
 `export default EscoImportConceptsComponent`
