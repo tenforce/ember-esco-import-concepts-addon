@@ -33,12 +33,13 @@ class EscoImportConceptsComponent extends Ember.Component
       importerEndpoint = @get 'importerEndpoint'
       fileContent = event.path[0][0].files[0]
       fileName = fileContent.name
+      effort = @get('mappingEffort')
 
       @set 'importStatus', "Uploading #{fileName}."
 
       Ember.$.ajax
         type: "POST"
-        url: "/import-concepts#{importerEndpoint}"
+        url: "/import-concepts#{importerEndpoint}?uuid=#{effort.get('id')}"
         data: fileContent
         processData: false
         success: (data) =>
@@ -77,9 +78,11 @@ class EscoImportConceptsComponent extends Ember.Component
             @moveGraph fileName, id
           when "Invalid"
             @set 'importStatus', "Validation not passed. #{fileName} with id #{id} is invalid."
+            @sendAction('graphIdReceived', id)
             @sendAction('toggleValidations', true)
           else
             @set 'importStatus', "Validation failed. Unknown status for #{fileName} with id #{id}: #{status}."
+            @sendAction('graphIdReceived', id)
             @sendAction('toggleValidations', true)
             console.log "Unknown status: #{status}."
       error: =>
