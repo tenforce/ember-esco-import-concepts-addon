@@ -1,19 +1,13 @@
 `import Ember from 'ember'`
-
-
-
 `import layout from '../templates/components/esco-import-concepts'`
 
-
-
-class EscoImportConceptsComponent extends Ember.Component
+EscoImportConceptsComponent = Ember.Component.extend
   # Addon parameters
 
   # eg "/import/taxonomy"
   importerEndpoint: Ember.K
   # eg "Select a taxonomy file to import..."
   startingMessage: Ember.K
-
 
   layout: layout
   tagName: 'div'
@@ -26,28 +20,34 @@ class EscoImportConceptsComponent extends Ember.Component
     unless @get('fileToUpload') is undefined then return false
     return true
 
-  actions:
-    importFile: ->
-      @sendAction('toggleValidations', false)
-      controller = @get 'controller'
-      importerEndpoint = @get 'importerEndpoint'
-      fileContent = event.path[0][0].files[0]
-      fileName = fileContent.name
-      effort = @get('mappingEffort')
+  didInsertElement: ->
+    Ember.$('#fileForm').submit (event) =>
+      event.preventDefault()
+      @importFile event
 
-      @set 'importStatus', "Uploading #{fileName}."
+  importFile: (e) ->
+    myevent = window.event or e
+    myevent = Ember.$.event.fix myevent
+    @sendAction('toggleValidations', false)
+    controller = @get 'controller'
+    importerEndpoint = @get 'importerEndpoint'
+    fileContent = myevent.currentTarget[0].files[0]
+    fileName = fileContent.name
+    effort = @get('mappingEffort')
 
-      Ember.$.ajax
-        type: "POST"
-        url: "/import-concepts#{importerEndpoint}?uuid=#{effort.get('id')}"
-        data: fileContent
-        processData: false
-        success: (data) =>
-          @validateFile fileName, data.id
-        error: =>
-          console.log "Call to import-concepts failed."
-          @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
-      false
+    @set 'importStatus', "Uploading #{fileName}."
+
+    Ember.$.ajax
+      type: "POST"
+      url: "/import-concepts#{importerEndpoint}?uuid=#{effort.get('id')}"
+      data: fileContent
+      processData: false
+      success: (data) =>
+        @validateFile fileName, data.id
+      error: =>
+        console.log "Call to import-concepts failed."
+        @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
+    false
 
   # Start validation
   validateFile: (fileName, id) ->
