@@ -5,5 +5,22 @@
   <button type="submit" disabled={{shouldDisable}}>Import</button>
 </form>
 
-<h3>Status:</h3>
+{{#if isFileLoaded}}
+  {{#radio-button value="utf-8" groupValue=encoding changed="radioButtonSelected"}}
+    TSV
+  {{/radio-button}}
+
+  {{#radio-button value="utf-16" groupValue=encoding changed="radioButtonSelected"}}
+    Unicode Text
+  {{/radio-button}}
+{{else}}
   {{importStatus}}
+{{/if}}
+
+
+{{#if showError}}
+  <div class="import-concepts-error">
+    <p>{{errorTitle}}</p>
+    <p>{{errorDetail}}</p>
+  </div>
+{{/if}}

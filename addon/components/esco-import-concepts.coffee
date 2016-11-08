@@ -12,13 +12,21 @@ EscoImportConceptsComponent = Ember.Component.extend
   layout: layout
   tagName: 'div'
   className: ['esco-import-concepts']
+  encoding: 'utf-8'
+
+  errorTitle: Ember.computed.alias 'serverError.title'
+  errorDetail: Ember.computed.alias 'serverError.detail'
+
+  showError: Ember.computed 'serverError', ->
+    @get('serverError') isnt undefined
 
   importStatus: Ember.computed 'startingMessage', ->
-    @get 'startingMessage'
+    "Status:" + @get 'startingMessage'
 
   shouldDisable: Ember.computed 'fileToUpload', ->
-    unless @get('fileToUpload') is undefined then return false
-    return true
+    @get('fileToUpload') is undefined or @get('fileToUpload') is ""
+
+  isFileLoaded: Ember.computed.not 'shouldDisable'
 
   didInsertElement: ->
     Ember.$('#fileForm').submit (event) =>
@@ -34,19 +42,22 @@ EscoImportConceptsComponent = Ember.Component.extend
     fileContent = myevent.currentTarget[0].files[0]
     fileName = fileContent.name
     effort = @get('mappingEffort')
-
     @set 'importStatus', "Uploading #{fileName}."
 
     Ember.$.ajax
       type: "POST"
-      url: "/import-concepts#{importerEndpoint}?uuid=#{effort.get('id')}"
+      url: "/import-concepts#{importerEndpoint}?uuid=#{effort.get('id')}&encoding=#{@get('encoding')}"
       data: fileContent
       processData: false
       success: (data) =>
+        @set 'serverError', undefined
         @validateFile fileName, data.id
-      error: =>
+      error: (err) =>
         console.log "Call to import-concepts failed."
-        @set 'importStatus', "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."
+        if err.responseJSON
+          @set('serverError', err.responseJSON.errors[0])
+        else # Error 500, no response JSON object received, microservice may be broken.
+          @set('serverError', { title: undefined, detail: "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."})
     false
 
   # Start validation
@@ -102,6 +113,9 @@ EscoImportConceptsComponent = Ember.Component.extend
           console.log "Call to move-graph failed."
           @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
 
+  actions:
+    radioButtonSelected: (value) ->
+      @set('encoding', value)
 
 
 `export default EscoImportConceptsComponent`
