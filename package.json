@@ -1,6 +1,6 @@
 {
   "name": "ember-esco-import-concepts-addon",
-  "version": "6.6.9",
+  "version": "6.7.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
