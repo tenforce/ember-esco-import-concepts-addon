@@ -2,11 +2,11 @@
 `import layout from '../templates/components/esco-import-concepts'`
 
 EscoImportConceptsComponent = Ember.Component.extend
-  # Addon parameters
+# Addon parameters
 
-  # eg "/import/taxonomy"
+# eg "/import/taxonomy"
   importerEndpoint: Ember.K
-  # eg "Select a taxonomy file to import..."
+# eg "Select a taxonomy file to import..."
   startingMessage: Ember.K
 
   layout: layout
@@ -21,12 +21,17 @@ EscoImportConceptsComponent = Ember.Component.extend
     @get('serverError') isnt undefined
 
   importStatus: Ember.computed 'startingMessage', ->
-    "Status:" + @get 'startingMessage'
+    "Status: " + @get 'startingMessage'
 
   shouldDisable: Ember.computed 'fileToUpload', ->
     @get('fileToUpload') is undefined or @get('fileToUpload') is ""
 
-  isFileLoaded: Ember.computed.not 'shouldDisable'
+  isFileLoaded: Ember.computed 'shouldDisable', ->
+# No time to waste on making something pretty, should set that status somewhere else though
+    if @get('shouldDisable') then return false
+    else
+      @set 'importStatus', "Status: Ready to import"
+      return true
 
   didInsertElement: ->
     Ember.$('#fileForm').submit (event) =>
@@ -60,7 +65,7 @@ EscoImportConceptsComponent = Ember.Component.extend
           @set('serverError', { title: undefined, detail: "Upload failed for #{fileName}. The import-concepts service might be unavailable or #{fileName} might be corrupt."})
     false
 
-  # Start validation
+# Start validation
   validateFile: (fileName, id) ->
     @set 'importStatus', "Validating #{fileName} with id #{id}."
     Ember.$.ajax
@@ -73,7 +78,7 @@ EscoImportConceptsComponent = Ember.Component.extend
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
 
-  # Poll validation status
+# Poll validation status
   checkValidation: (fileName, id) ->
     Ember.$.ajax
       type: "GET"
@@ -100,18 +105,18 @@ EscoImportConceptsComponent = Ember.Component.extend
         console.log "Call to validation service failed."
         @set 'importStatus', "Validation failed for #{fileName} with id #{id}. The validation service might be unavailable."
 
-  # Move temp graph into application graph
+# Move temp graph into application graph
   moveGraph: (fileName, id) ->
     @set 'importStatus', "#{fileName} with id #{id} is validated. Moveing into application graph."
     Ember.$.ajax
-        type: "GET"
-        url: "/move-graph/move?uuid=#{id}"
-        success: (data) =>
-          @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
-          @sendAction('dataImported', data)
-        error: =>
-          console.log "Call to move-graph failed."
-          @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
+      type: "GET"
+      url: "/move-graph/move?uuid=#{id}"
+      success: (data) =>
+        @set 'importStatus', "Finished. #{fileName} with id #{id} is validated and copied into application graph."
+        @sendAction('dataImported', data)
+      error: =>
+        console.log "Call to move-graph failed."
+        @set 'importStatus', "Moveing failed for #{fileName} with id #{id}. The move-graph service might be unavailable, or the graph is not found. It might already be copied."
 
   actions:
     radioButtonSelected: (value) ->

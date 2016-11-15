@@ -13,14 +13,17 @@
   {{#radio-button value="utf-16" groupValue=encoding changed="radioButtonSelected"}}
     Unicode Text
   {{/radio-button}}
-{{else}}
-  {{importStatus}}
 {{/if}}
+
 
 
 {{#if showError}}
   <div class="import-concepts-error">
     <p>{{errorTitle}}</p>
     <p>{{errorDetail}}</p>
+  </div>
+{{else}}
+  <div class="import-concepts-status">
+    <p>{{importStatus}}</p>
   </div>
 {{/if}}
